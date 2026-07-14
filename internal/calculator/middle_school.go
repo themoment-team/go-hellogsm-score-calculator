@@ -75,11 +75,11 @@ func CalcGeneralSubjectsSemesterScore(dto types.MiddleSchoolAchievementCalcDto, 
 		}
 	case types.GRADUATE:
 		return types.GeneralSubjectsSemesterScoreCalcDto{
-			Score1_2: big.NewRat(0, 1),
+			Score1_2: CalcGeneralSubjectsScore(dto.Achievement1_2, big.NewRat(18, 1)),
 			Score2_1: CalcGeneralSubjectsScore(dto.Achievement2_1, big.NewRat(36, 1)),
 			Score2_2: CalcGeneralSubjectsScore(dto.Achievement2_2, big.NewRat(36, 1)),
-			Score3_1: CalcGeneralSubjectsScore(dto.Achievement3_1, big.NewRat(54, 1)),
-			Score3_2: CalcGeneralSubjectsScore(dto.Achievement3_2, big.NewRat(54, 1)),
+			Score3_1: CalcGeneralSubjectsScore(dto.Achievement3_1, big.NewRat(45, 1)),
+			Score3_2: CalcGeneralSubjectsScore(dto.Achievement3_2, big.NewRat(45, 1)),
 		}
 	default:
 		return types.GeneralSubjectsSemesterScoreCalcDto{}
