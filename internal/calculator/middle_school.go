@@ -39,7 +39,7 @@ func BuildCalcDtoWithFillEmpty(dto types.MiddleSchoolAchievementReqDto, graduati
 	if tmpAchievement2_2 == nil {
 		tmpAchievement2_2 = tmpAchievement2_1
 	}
-	if graduationType == types.CANDIDATE && tmpAchievement1_2 == nil {
+	if tmpAchievement1_2 == nil {
 		if tmpAchievement1_1 == nil {
 			tmpAchievement1_2 = tmpAchievement2_2
 		} else {
