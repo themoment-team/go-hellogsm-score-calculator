@@ -5,6 +5,26 @@ import (
 	"go-hellogsm-score-calculator/internal/types"
 )
 
+// 예체능 과목 수 (체육/음악/미술)
+const artsPhysicalSubjectCount = 3
+
+// 예체능 성적을 입력하는 학기 수
+// CANDIDATE: 자유학년제 2-1 ~ 3-1, 자유학기제 1-1 ~ 3-1
+// GRADUATE: 자유학년제 2-1 ~ 3-2, 자유학기제 1-1 ~ 3-2
+func artsPhysicalSemesterCount(graduationType types.GraduationType, liberalSystem string) int {
+	isFreeSemester := liberalSystem == "자유학기제"
+	if graduationType == types.GRADUATE {
+		if isFreeSemester {
+			return 6
+		}
+		return 4
+	}
+	if isFreeSemester {
+		return 5
+	}
+	return 3
+}
+
 func ValidateRequest(dto types.MiddleSchoolAchievementReqDto) error {
 	// graduationType 필수 검증
 	if dto.GraduationType == "" {
@@ -60,6 +80,13 @@ func ValidateRequest(dto types.MiddleSchoolAchievementReqDto) error {
 
 	if dto.ArtsPhysicalAchievement == nil || len(dto.ArtsPhysicalAchievement) == 0 {
 		return fmt.Errorf("artsPhysicalAchievement is required and cannot be empty")
+	}
+
+	// 예체능 점수는 배열에 들어온 칸만 평균에 반영하므로, 길이가 다르면 실제 성적과 다른 점수가 나온다
+	expectedArtsPhysicalLength := artsPhysicalSemesterCount(graduationType, dto.LiberalSystem) * artsPhysicalSubjectCount
+	if len(dto.ArtsPhysicalAchievement) != expectedArtsPhysicalLength {
+		return fmt.Errorf("artsPhysicalAchievement must contain exactly %d elements for %s with liberalSystem '%s': %d",
+			expectedArtsPhysicalLength, graduationType, dto.LiberalSystem, len(dto.ArtsPhysicalAchievement))
 	}
 
 	if dto.AbsentDays == nil || len(dto.AbsentDays) != 3 {
